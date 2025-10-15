@@ -7,3 +7,4 @@ select
     max(event_ts) as session_end
 from {{ ref('stg_events') }}
 group by 1,2
+

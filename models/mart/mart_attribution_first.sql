@@ -8,3 +8,4 @@ select
     min(event_ts) as first_click_ts
 from {{ ref('stg_events') }}
 group by user_pseudo_id
+
