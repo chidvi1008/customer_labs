@@ -1,9 +1,5 @@
 # Python
-venv/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+venv/*
 
 # dbt artifacts
 dbt_modules/
