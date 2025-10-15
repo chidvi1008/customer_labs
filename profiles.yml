@@ -1,0 +1,8 @@
+customer_labs:
+  outputs:
+    dev:
+      type: duckdb
+      path: data/customer_labs.duckdb
+  target: dev
+
+

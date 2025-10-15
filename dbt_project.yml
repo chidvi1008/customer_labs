@@ -1,0 +1,20 @@
+
+---
+
+## ⚙️ `dbt_project.yml`
+
+```yaml
+name: 'customer_labs'
+version: '1.0'
+config-version: 2
+
+profile: 'customer_labs'
+
+models:
+  customer_labs:
+    stg:
+      materialized: view
+    int:
+      materialized: table
+    mart:
+      materialized: table

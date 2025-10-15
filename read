@@ -1,0 +1,9 @@
+# CustomerLabs Real-Time Attribution Assessment
+
+## Overview
+This project builds a near-real-time attribution pipeline and dashboard using a GA4 sample dataset. It includes:
+
+- dbt models (staging → intermediate → mart)
+- First-Click and Last-Click attribution
+- Streaming demo script
+- Streamlit dashboard
