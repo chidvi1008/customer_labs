@@ -1,10 +1,21 @@
 {{ config(materialized='table') }}
 
-select
+WITH ranked_events AS (
+  SELECT
     user_pseudo_id,
-    any_value(source) as last_source,
-    any_value(medium) as last_medium,
-    any_value(campaign) as last_campaign,
-    max(event_ts) as last_click_ts
-from {{ ref('stg_events') }}
-group by user_pseudo_id
+    source,
+    medium,
+    campaign,
+    event_ts,
+    ROW_NUMBER() OVER (PARTITION BY user_pseudo_id ORDER BY event_ts DESC) AS rn
+  FROM {{ ref('stg_events') }}
+)
+
+SELECT
+  user_pseudo_id,
+  source AS first_source,
+  medium AS first_medium,
+  campaign AS first_campaign,
+  event_ts AS first_click_ts
+FROM ranked_events
+WHERE rn = 1;
