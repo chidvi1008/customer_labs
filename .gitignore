@@ -1,0 +1,19 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# dbt artifacts
+dbt_modules/
+target/
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.sqlite
+*.duckdb
