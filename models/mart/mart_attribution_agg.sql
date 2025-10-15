@@ -1,17 +1,17 @@
 {{ config(materialized='table') }}
 
-select
-    'First Click' as model_type,
-    first_source as source,
-    count(*) as users
-from {{ ref('mart_attribution_first') }}
-group by 1,2
+SELECT
+    'First Click' AS model_type,
+    first_source AS source,
+    COUNT(*) AS users
+FROM {{ ref('int_events') }}
+GROUP BY 1,2
 
-union all
+UNION ALL
 
-select
-    'Last Click' as model_type,
-    last_source as source,
-    count(*) as users
-from {{ ref('mart_attribution_last') }}
-group by 1,2
+SELECT
+    'Last Click' AS model_type,
+    last_source AS source,
+    COUNT(*) AS users
+FROM {{ ref('int_events') }}
+GROUP BY 1,2

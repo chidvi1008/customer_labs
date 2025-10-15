@@ -1,28 +1,30 @@
-import time, random, duckdb, pandas as pd
+import duckdb
+import pandas as pd
 from datetime import datetime
+import uuid
+import random
 
-events = [
-    {"event_name": "page_view"},
-    {"event_name": "add_to_cart"},
-    {"event_name": "purchase"}
-]
+con = duckdb.connect("my_db.duckdb")
 
-con = duckdb.connect("data/customer_labs.duckdb")
-con.execute("CREATE TABLE IF NOT EXISTS ga4_stream AS SELECT * FROM read_csv_auto('data/sample_ga4_events.csv') LIMIT 0;")
+# Truncate stage table
+con.execute("DELETE FROM stg_events")
 
-for i in range(10):
-    e = random.choice(events)
-    row = {
-        "event_timestamp": datetime.utcnow().isoformat(),
-        "event_name": e["event_name"],
-        "session_id": f"s{i%3}",
-        "user_pseudo_id": f"user{i%2}",
-        "source": random.choice(["google", "facebook", "email"]),
-        "medium": random.choice(["cpc", "organic", "referral"]),
-        "campaign": random.choice(["summer_sale", "new_launch"]),
-        "page_location": "/home"
-    }
-    df = pd.DataFrame([row])
-    con.execute("INSERT INTO ga4_stream SELECT * FROM df")
-    print(f"Streamed: {row}")
-    time.sleep(2)
+# Simulate fetching events from GA4 API
+events = []
+for i in range(20):
+    events.append({
+        "event_id": str(uuid.uuid4()),
+        "user_pseudo_id": f"user_{random.randint(1,5)}",
+        "event_name": random.choice(["page_view", "click", "purchase"]),
+        "source": random.choice(["google", "facebook", "newsletter"]),
+        "medium": random.choice(["cpc", "organic", "email"]),
+        "campaign": random.choice(["campaign_1", "campaign_2"]),
+        "event_timestamp": datetime.now(),
+        "session_id": f"session_{random.randint(1,5)}",
+        "page_location": f"/page_{random.randint(1,5)}"
+    })
+
+df = pd.DataFrame(events)
+
+# Insert into staging
+con.execute("INSERT INTO stg_events SELECT * FROM df")
