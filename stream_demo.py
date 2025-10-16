@@ -4,8 +4,8 @@ from datetime import datetime
 import uuid
 import random
 
-# Connect to DuckDB database
-con = duckdb.connect("data/customer_labs.duckdb")
+# Use an in-memory DuckDB instance (no file dependency)
+con = duckdb.connect(database=':memory:')
 
 # Create table schema (runs only if it doesn’t exist)
 con.execute("""
