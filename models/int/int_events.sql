@@ -4,12 +4,16 @@ WITH deduped_events AS (
     SELECT
         *,
         ROW_NUMBER() OVER (
-            PARTITION BY event_timestamp, user_pseudo_id, event_name
+            PARTITION BY user_pseudo_id, event_timestamp, event_name, campaign, source, medium
             ORDER BY event_timestamp
         ) AS row_num
-    FROM stg_events
-)
-,
+    FROM {{ ref('stg_events') }}
+),
+clean_events AS (
+    SELECT *
+    FROM deduped_events
+    WHERE row_num = 1
+),
 session_agg AS (
     SELECT
         session_id,
@@ -21,11 +25,10 @@ session_agg AS (
                 THEN 1 
             ELSE 0 
         END AS is_long_session
-    FROM deduped_events
+    FROM clean_events
     GROUP BY session_id, user_pseudo_id
     HAVING COUNT(*) > 1
-)
-,
+),
 first_last_click AS (
     SELECT
         user_pseudo_id,
@@ -37,7 +40,7 @@ first_last_click AS (
         ARRAY_AGG(source ORDER BY event_timestamp DESC)[1] AS last_source,
         ARRAY_AGG(medium ORDER BY event_timestamp DESC)[1] AS last_medium,
         ARRAY_AGG(campaign ORDER BY event_timestamp DESC)[1] AS last_campaign
-    FROM deduped_events
+    FROM clean_events
     GROUP BY user_pseudo_id
 )
 
