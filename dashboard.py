@@ -2,7 +2,9 @@ import streamlit as st
 import duckdb
 import pandas as pd
 
-con = duckdb.connect("data/customer_labs.duckdb")
+# ✅ Use in-memory database instead of missing file
+con = duckdb.connect(database=':memory:')
+
 
 st.title("📈 Real-Time Attribution Dashboard")
 
