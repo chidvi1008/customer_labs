@@ -6,8 +6,6 @@ profile: 'customer_labs'
 
 models:
   customer_labs:
-    stg:
-      materialized: view
     int:
       materialized: table
     mart:
