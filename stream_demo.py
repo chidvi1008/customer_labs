@@ -4,7 +4,7 @@ from datetime import datetime
 import uuid
 import random
 
-# Use an in-memory DuckDB instance (no file dependency)
+# ✅ Use in-memory database instead of missing file
 con = duckdb.connect(database=':memory:')
 
 # Create table schema (runs only if it doesn’t exist)
