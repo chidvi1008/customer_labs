@@ -10,15 +10,15 @@ con = duckdb.connect("data/customer_labs.duckdb")
 # Create table schema (runs only if it doesn’t exist)
 con.execute("""
 CREATE TABLE IF NOT EXISTS stg_events (
-    event_id TEXT,
-    user_pseudo_id TEXT,
-    event_name TEXT,
-    source TEXT,
-    medium TEXT,
-    campaign TEXT,
+    event_id STRING,
+    user_pseudo_id STRING,
+    event_name STRING,
+    source STRING,
+    medium STRING,
+    campaign STRING,
     event_timestamp TIMESTAMP,
-    session_id TEXT,
-    page_location TEXT
+    session_id STRING,
+    page_location STRING
 );
 """)
 
